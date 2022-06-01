@@ -1,7 +1,7 @@
 name: birdpress
 description: A blogging engine in Flutter.
 version: 0.0.1
-homepage:
+homepage: https://github.com/imichaelnorris/birdpress
 
 environment:
   sdk: '>=2.18.0-44.1.beta <3.0.0'

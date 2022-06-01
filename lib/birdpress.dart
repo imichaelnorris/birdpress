@@ -22,8 +22,7 @@ class BirdPress extends StatelessWidget {
       child: MaterialApp(
         initialRoute: "/",
         routes: {
-          "/": (context) =>
-              BirdHouse(Provider.of<BirdPressSettings>(context).indexFile),
+          "/": (context) => BirdHouse(BirdPressSettings.of(context).indexFile),
         },
       ),
     );
@@ -40,6 +39,10 @@ class BirdPressSettings {
     this.indexFile = "assets/birdpress/index.md",
     this.markdownSettings = const MarkdownSettings(),
   });
+
+  static BirdPressSettings of(BuildContext context) {
+    return Provider.of<BirdPressSettings>(context);
+  }
 }
 
 typedef LinkCallback = void Function(String text, String? url, String title);
@@ -57,6 +60,26 @@ class MarkdownSettings {
 // Home Page.
 class BirdHouse extends MarkdownPage {
   const BirdHouse(super.asset, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // BirdPressSettings settings = BirdPressSettings.of(context);
+    // BirdFeeder feeder = BirdFeeder.of(context);
+    // Pseudocode of what this should look like. If asset is not null and
+    // index.md exists, then render index page. If settings.show_preview exists
+    // then show a preview containing the first 10 posts. Figure out pagination
+    // later. Previews should be defined by settings as well, show this many
+    // lines / characters and a read more link or something like that.
+    return index(context);
+  }
+
+  Widget index(BuildContext context) {
+    return super.build(context);
+  }
+
+  // Widget preview(BuildContext context) {
+  //   return ListView.builder(itemBuilder: itemBuilder)
+  // }
 }
 
 class MarkdownPage extends StatelessWidget {
@@ -67,8 +90,7 @@ class MarkdownPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future:
-            Provider.of<BirdFeeder>(context).readOrLoadAsset(context, asset),
+        future: BirdFeeder.of(context).readOrLoadAsset(context, asset),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (!snapshot.hasData) {
             // TODO: add loading screen.
@@ -79,9 +101,7 @@ class MarkdownPage extends StatelessWidget {
           }
           return Markdown(
             data: snapshot.data!,
-            onTapLink: Provider.of<BirdPressSettings>(context)
-                .markdownSettings
-                .onTapLink,
+            onTapLink: BirdPressSettings.of(context).markdownSettings.onTapLink,
           );
         });
   }
@@ -96,6 +116,10 @@ class BirdFeeder {
 
   bool isCached(String asset) {
     return cachedAssets.containsKey(asset);
+  }
+
+  static BirdFeeder of(BuildContext context) {
+    return Provider.of<BirdFeeder>(context);
   }
 
   Future<String> readOrLoadAsset(BuildContext context, String asset) async {
