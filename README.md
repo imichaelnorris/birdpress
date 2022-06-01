@@ -11,28 +11,38 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+BirdPress is a Markdown-based blogging platform that can be used as a standalone
+Flutter app or embedded inside of another Flutter app.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+* Write blog posts in Markdown.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+BirdPress is currently under development, all APIs are subject to change before
+the 1.0.0 release. The documentation will be kept up-to-date to my best-effort.
+
+* install the birdpress plugin. 
+* update assets/birdpress/index.md
+* write blogposts in assets/birdpress/posts/
+* follow birdpress/lib/main.dart to see how to use BirdPress in an existing flutter app
+
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+BirdPress is a Flutter widget, run it as a standalone Flutter app like so:
 
 ```dart
-const like = 'sample';
+main() {
+  runApp(BirdPress());
+}
 ```
 
 ## Additional information
+
+I am currently investigating the following features:
+[ ] Flutter-based templating for designing layouts
 
 TODO: Tell users more about the package: where to find more information, how to
 contribute to the package, how to file issues, what response they can expect
