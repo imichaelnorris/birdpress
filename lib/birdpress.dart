@@ -1,6 +1,7 @@
 library birdpress;
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -61,6 +62,12 @@ class BirdPressSettings {
   // Path for index. defaults to "", which is blog.com
   final String blogPrefix;
 
+  // How many lines to render for a preview post. Includes whitespace.
+  final int previewLines;
+
+  // How many pixels high the preview widgets will be.
+  final double previewHeight;
+
   const BirdPressSettings({
     this.postsDir = "assets/birdpress/posts",
     this.indexFile = "assets/birdpress/index.md",
@@ -69,6 +76,8 @@ class BirdPressSettings {
     this.title = "BirdPress",
     this.postsPath = "posts",
     this.blogPrefix = "",
+    this.previewLines = 10,
+    this.previewHeight = 100,
   });
 
   static BirdPressSettings of(BuildContext context) {
@@ -111,15 +120,22 @@ class BirdHouse extends StatelessWidget {
     if (settings.showPreview) {
       widgets.add(previews(context));
     }
-    return SizedBox(
-      height: 400,
-      child: ListView.separated(
-        itemCount: widgets.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        separatorBuilder: (_, index) => const Divider(thickness: 5),
-        itemBuilder: (_, index) => widgets[index],
-      ),
+    return Column(
+      children: [
+        settings.title.isNotEmpty ? Text(settings.title) : Container(),
+        Expanded(
+          child: SizedBox(
+            height: 400,
+            child: ListView.separated(
+              itemCount: widgets.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              separatorBuilder: (_, index) => const Divider(thickness: 5),
+              itemBuilder: (_, index) => widgets[index],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -142,21 +158,24 @@ class PostPreviews extends StatelessWidget {
     return FutureBuilder(
       future: BirdFeeder.of(context).listPostNames(context),
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        BirdPressSettings settings = BirdPressSettings.of(context);
         if (!snapshot.hasData) {
-          print("PostPreview loading...");
           // TODO: add loading screen.
-          return SizedBox(width: 10, height: 10, child: Container());
+          return SizedBox(
+              height: settings.previewHeight, child: const Text("loading previews..."));
         } else if (snapshot.hasError) {
-          print("PostPreview error");
           // TODO: add error page.
-          return SizedBox(width: 10, height: 10, child: Container());
+          return SizedBox(
+              height: settings.previewHeight,
+              child: const Text("error loading previews"));
         }
 
         List<Widget> previews = snapshot.data!
-            .map((asset) => SizedBox(height: 200, child: MarkdownPage(asset)))
+            .map((asset) => MarkdownPage(asset, preview: true))
             .toList();
 
         return ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: previews.length,
             separatorBuilder: (_, index) => const Divider(),
@@ -164,6 +183,10 @@ class PostPreviews extends StatelessWidget {
       },
     );
   }
+
+// Widget navigationBar(BuildContext context) {
+//
+// }
 }
 
 // Params for which page is being viewed and any other information that would
@@ -176,24 +199,41 @@ class PageParams extends ChangeNotifier {
 
 class MarkdownPage extends StatelessWidget {
   final String asset;
+  final bool preview;
 
-  const MarkdownPage(this.asset, {Key? key}) : super(key: key);
+  const MarkdownPage(this.asset, {this.preview = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: BirdFeeder.of(context).readOrLoadAsset(context, asset),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          BirdPressSettings settings = BirdPressSettings.of(context);
           if (!snapshot.hasData) {
             // TODO: add loading screen.
-            return const SizedBox(
-                width: 10, height: 10, child: Text("loading..."));
+            return SizedBox(
+                width: 10, height: settings.previewHeight, child: const Text("loading..."));
           } else if (snapshot.hasError) {
             // TODO: add error page.
-            return const SizedBox(width: 10, height: 10, child: Text("404"));
+            return SizedBox(width: 10, height: settings.previewHeight, child: const Text("404"));
+          }
+          String data = snapshot.data!;
+
+          if (preview) {
+            data = data
+                .split("\n")
+                .sublist(
+                    0,
+                    min(
+                      data.split("\n").length,
+                      BirdPressSettings.of(context).previewLines,
+                    ))
+                .join("\n");
           }
           return Markdown(
-            data: snapshot.data!,
+            data: data,
+            shrinkWrap: true,
             onTapLink: BirdPressSettings.of(context).markdownSettings.onTapLink,
           );
         });
