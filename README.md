@@ -14,6 +14,9 @@ and the Flutter guide for
 BirdPress is a Markdown-based blogging platform that can be used as a standalone
 Flutter app or embedded inside of another Flutter app.
 
+## Example
+![birdpress example blog](https://raw.githubusercontent.com/imichaelnorris/birdpress/master/Screen%20Shot%202022-06-03%20at%201.51.39%20PM.png)
+
 ## Features
 
 * Write blog posts in Markdown.
