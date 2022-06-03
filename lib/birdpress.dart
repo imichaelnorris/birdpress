@@ -113,10 +113,12 @@ class BirdHouse extends StatelessWidget {
     }
     return SizedBox(
       height: 400,
-      child: ListView(
+      child: ListView.separated(
+        itemCount: widgets.length,
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
-        children: widgets,
+        separatorBuilder: (_, index) => const Divider(thickness: 5),
+        itemBuilder: (_, index) => widgets[index],
       ),
     );
   }
@@ -152,7 +154,11 @@ class PostPreviews extends StatelessWidget {
             .map((asset) => SizedBox(height: 200, child: MarkdownPage(asset)))
             .toList();
 
-        return ListView(shrinkWrap: true, children: previews);
+        return ListView.separated(
+            shrinkWrap: true,
+            itemCount: previews.length,
+            separatorBuilder: (_, index) => const Divider(),
+            itemBuilder: (_, index) => previews[index]);
       },
     );
   }
