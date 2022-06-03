@@ -124,15 +124,12 @@ class BirdHouse extends StatelessWidget {
       children: [
         settings.title.isNotEmpty ? Text(settings.title) : Container(),
         Expanded(
-          child: SizedBox(
-            height: 400,
-            child: ListView.separated(
-              itemCount: widgets.length,
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              separatorBuilder: (_, index) => const Divider(thickness: 5),
-              itemBuilder: (_, index) => widgets[index],
-            ),
+          child: ListView.separated(
+            itemCount: widgets.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            separatorBuilder: (_, index) => const Divider(thickness: 5),
+            itemBuilder: (_, index) => widgets[index],
           ),
         ),
       ],
@@ -140,9 +137,7 @@ class BirdHouse extends StatelessWidget {
   }
 
   Widget index(BuildContext context) {
-    return SizedBox(
-        height: 250,
-        child: MarkdownPage(BirdPressSettings.of(context).indexFile));
+    return MarkdownPage(BirdPressSettings.of(context).indexFile);
   }
 
   Widget previews(BuildContext context) {
@@ -162,7 +157,8 @@ class PostPreviews extends StatelessWidget {
         if (!snapshot.hasData) {
           // TODO: add loading screen.
           return SizedBox(
-              height: settings.previewHeight, child: const Text("loading previews..."));
+              height: settings.previewHeight,
+              child: const Text("loading previews..."));
         } else if (snapshot.hasError) {
           // TODO: add error page.
           return SizedBox(
@@ -213,10 +209,15 @@ class MarkdownPage extends StatelessWidget {
           if (!snapshot.hasData) {
             // TODO: add loading screen.
             return SizedBox(
-                width: 10, height: settings.previewHeight, child: const Text("loading..."));
+                width: 10,
+                height: settings.previewHeight,
+                child: const Text("loading..."));
           } else if (snapshot.hasError) {
             // TODO: add error page.
-            return SizedBox(width: 10, height: settings.previewHeight, child: const Text("404"));
+            return SizedBox(
+                width: 10,
+                height: settings.previewHeight,
+                child: const Text("404"));
           }
           String data = snapshot.data!;
 
