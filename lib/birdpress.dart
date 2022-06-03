@@ -106,7 +106,7 @@ class BirdHouse extends StatelessWidget {
     // lines / characters and a read more link or something like that.
     List<Widget> widgets = [];
     if (settings.indexFile.isNotEmpty) {
-      widgets.add(SizedBox(height: 250, child: index(context)));
+      widgets.add(index(context));
     }
     if (settings.showPreview) {
       widgets.add(const PostPreviews());
@@ -124,7 +124,9 @@ class BirdHouse extends StatelessWidget {
   }
 
   Widget index(BuildContext context) {
-    return MarkdownPage(BirdPressSettings.of(context).indexFile);
+    return SizedBox(
+        height: 250,
+        child: MarkdownPage(BirdPressSettings.of(context).indexFile));
   }
 
 // Widget preview(BuildContext context) {
