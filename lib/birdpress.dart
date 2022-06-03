@@ -16,6 +16,10 @@ class BirdPress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String postsPath = "/${settings.postsPath}";
+    if (settings.blogPrefix.isNotEmpty) {
+      postsPath = "/${settings.blogPrefix}$postsPath";
+    }
     return MultiProvider(
       providers: [
         Provider(create: (_) => settings),
@@ -25,7 +29,8 @@ class BirdPress extends StatelessWidget {
       child: MaterialApp(
         initialRoute: "/",
         routes: {
-          "/": (context) => const BirdHouse(),
+          "/${settings.blogPrefix}": (context) => const BirdHouse(),
+          postsPath: (context) => const PostPreviews(),
         },
       ),
     );
@@ -50,12 +55,20 @@ class BirdPressSettings {
   // Title for the BirdPress site.
   final String title;
 
+  // Path for posts. blog.com/$postsPath
+  final String postsPath;
+
+  // Path for index. defaults to "", which is blog.com
+  final String blogPrefix;
+
   const BirdPressSettings({
     this.postsDir = "assets/birdpress/posts",
     this.indexFile = "assets/birdpress/index.md",
     this.markdownSettings = const MarkdownSettings(),
     this.showPreview = true,
     this.title = "BirdPress",
+    this.postsPath = "posts",
+    this.blogPrefix = "",
   });
 
   static BirdPressSettings of(BuildContext context) {
