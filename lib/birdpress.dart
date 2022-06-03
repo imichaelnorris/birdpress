@@ -68,6 +68,10 @@ class BirdPressSettings {
   // How many pixels high the preview widgets will be.
   final double previewHeight;
 
+  // What order the posts are in the posts directory. Posts should have
+  // ordered titles to ensure they're posted in order.
+  final PostOrder postOrder;
+
   const BirdPressSettings({
     this.postsDir = "assets/birdpress/posts",
     this.indexFile = "assets/birdpress/index.md",
@@ -78,12 +82,15 @@ class BirdPressSettings {
     this.blogPrefix = "",
     this.previewLines = 10,
     this.previewHeight = 100,
+    this.postOrder = PostOrder.ascending,
   });
 
   static BirdPressSettings of(BuildContext context) {
     return Provider.of<BirdPressSettings>(context);
   }
 }
+
+enum PostOrder { ascending, descending }
 
 typedef LinkCallback = void Function(String text, String? url, String title);
 
@@ -169,6 +176,9 @@ class PostPreviews extends StatelessWidget {
         List<Widget> previews = snapshot.data!
             .map((asset) => MarkdownPage(asset, preview: true))
             .toList();
+        if (settings.postOrder == PostOrder.descending) {
+          previews = previews.reversed.toList();
+        }
 
         // TODO: add pagination.
         // PageParams args =
@@ -237,8 +247,9 @@ class MarkdownPage extends StatelessWidget {
           }
           return Markdown(
             data: data,
+            // TODO: possibly make this !preview.
             shrinkWrap: true,
-            onTapLink: BirdPressSettings.of(context).markdownSettings.onTapLink,
+            onTapLink: settings.markdownSettings.onTapLink,
           );
         });
   }
