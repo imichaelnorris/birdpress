@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_markdown: ^0.6.10+2
+  path_provider: ^2.0.10
   provider: ^6.0.3
   url_launcher: ^6.1.2
 
@@ -23,4 +24,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/birdpress/index.md
-#    - assets/birdpress/*
+    # how to list everything in one directory?
+    - assets/birdpress/posts/post1.md
+    - assets/birdpress/posts/post2.md
