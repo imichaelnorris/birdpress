@@ -109,7 +109,7 @@ class BirdHouse extends StatelessWidget {
       widgets.add(index(context));
     }
     if (settings.showPreview) {
-      widgets.add(const PostPreviews());
+      widgets.add(previews(context));
     }
     return SizedBox(
       height: 400,
@@ -129,9 +129,9 @@ class BirdHouse extends StatelessWidget {
         child: MarkdownPage(BirdPressSettings.of(context).indexFile));
   }
 
-// Widget preview(BuildContext context) {
-//   return ListView.builder(itemBuilder: itemBuilder)
-// }
+  Widget previews(BuildContext context) {
+    return const PostPreviews();
+  }
 }
 
 class PostPreviews extends StatelessWidget {
