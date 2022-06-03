@@ -171,7 +171,6 @@ class PostPreviews extends StatelessWidget {
             .toList();
 
         return ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: previews.length,
             separatorBuilder: (_, index) => const Divider(),
