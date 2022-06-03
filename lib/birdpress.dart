@@ -100,7 +100,7 @@ class MarkdownSettings {
   const MarkdownSettings({this.onTapLink = MarkdownSettings._onTapLink});
 
   static void _onTapLink(String text, String? url, String title) {
-    launchUrl(Uri(path: url!));
+    launchUrl(Uri.parse(url!));
   }
 }
 
