@@ -288,6 +288,11 @@ class BirdFeeder {
   }
 
   Future<String> loadAsset(BuildContext context, String asset) async {
-    return await DefaultAssetBundle.of(context).loadString(asset);
+    try {
+      return await DefaultAssetBundle.of(context).loadString(asset);
+    } catch (e) {
+      return await DefaultAssetBundle.of(context)
+          .loadString("packages/birdpress/$asset");
+    }
   }
 }
