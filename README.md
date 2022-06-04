@@ -11,6 +11,8 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
+![BirdPress Logo](bird5.png)
+
 BirdPress is a Markdown-based blogging platform that can be used as a standalone
 Flutter app or embedded inside of another Flutter app.
 
